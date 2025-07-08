@@ -10,7 +10,7 @@ tidymodels_prefer()
 # K-fold - k = n -> k-fold = LOOCV
 # probabilistico
 
-# Podem ser testasdos os resultados com intervalos de confiança bootstrap
+# Podem ser testasdos os resultados com intervalos de confiança bootstrap 
 
 # nested cv - validação cruzada dentro da validação cruzada
 
@@ -80,6 +80,9 @@ wflow <- workflow() |>
 cv <- rsample::vfold_cv(not_testing, v = 3, repeats = 1)
 cv_tidy <- tidy(cv)
 
+# leave one out cv (not supported in tune_grid)
+loocv <- rsample::loo_cv(not_testing)
+
 # visualizando a cv
 cv_tidy |>
   ggplot(aes(x = Fold, y = Row, fill = Data)) +
@@ -89,11 +92,29 @@ cv_tidy |>
 
 # Tunando o modelo
 tune_res <- tune_grid(
-  wf,
+  wflow,
   resamples = cv,
-  grid = 11,
-  control = control_grid(save_pred = TRUE)
+  grid = 10,
+  control = control_grid(save_pred = TRUE),
+  metrics = yardstick::metric_set(rmse)
 )
+
+# intervalos de confiança para o rmse
+tune::int_pctl(tune_res)
 
 # visualizando os melhores hiperparametros
 tune_res |> show_best(metric = "rmse")
+
+# plot do tune
+autoplot(tune_res) + theme_minimal()
+
+# ajuste do modelo com o p escolhido com todo o conjunto not testing
+# (remove a validaçao)
+best_params <- select_best(tune_res, metric = "rmse")
+final_wf <- finalize_workflow(wflow, best_params)
+
+modelo_final <- tune::last_fit(final_wf, split = data_split)
+
+# extrair o modelo para novas previsões
+final_model <- extract_workflow(modelo_final)
+predict(final_model, new_data = your_new_data)
