@@ -1,6 +1,7 @@
 # imports
 library(tidymodels)
 library(tidyverse)
+library(finetune)
 
 tidymodels_prefer()
 
@@ -98,6 +99,49 @@ tune_res <- tune_grid(
   control = control_grid(save_pred = TRUE),
   metrics = yardstick::metric_set(rmse)
 )
+
+# Métodos de otimização de hiperparâmetros
+# 1. Grid Search: 
+# Testa as possiveis combinações estabelecidas em um espço de busca fixado
+# tune::tune_grid()
+# determinístico
+# custo alto por iteração
+
+# 2. Randomized search:
+# Escolhe aleatoriamente n combinações no espaço paramétrico dos hiperparametros
+# tune::tune_grid(..., search = "random)
+# pode ser mais eficiente em grandes espaços
+# não garante o melhor ponto e é aleatório
+# custo medio por iteração
+
+# 3. Adaptative Selection
+# Avalia estatisticamente os candidatos a melhor hiperparametro na validação
+# descarta os piores e segue buscando dentre os melhores
+# tune_grid(..., control = control_grid(adaptative = TRUE))
+# pode descartar bons candidatos cedo
+# custo baixo a medio por iteração
+
+# 4. Otimização bayesiana
+# Modela a função de avaliação como uma distribuição probabilistica e seleciona
+# hiperparâmetros que maximizem uma função aquisição (ex: expected improvement)
+# tune_bayes()
+# as proximas mediçoes são otimizadas com as anteriores (otimização inteligente)
+# custo alto por iteração
+
+# 5. Simulated Annealing
+# admite com certa probabilidade soluções levemente piores para escapar de 
+# minimos locais. A probabilidade diminui com as iterações.
+# ainda mais leve que um grid search, mas ainda assim lento 
+# e com muitos parametros. Custo baixo por iteraçao.
+# finetune::tune_sim_anneal()
+
+# 6. Racing (Hyperband, Successive Halving)
+# Avaliam muitos hiperparâmetros com menos recursos (ex: menos folds ou dados) 
+# e vão alocando mais recursos apenas para os melhores candidatos.
+# Muito eficiente e escala bem para grandes espaços
+# Pode ser sensivel a escolhas iniciais
+# finetune::tune_race_win_loss() ou finetune::tune_race_anova()
+# custo muito baixo a medio por iteraçao
 
 # intervalos de confiança para o rmse
 tune::int_pctl(tune_res)
