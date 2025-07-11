@@ -1,0 +1,70 @@
+Regras de bolso para utilizar algoritmos de otimizaçao de hiperparametros
+As regras servem como ponto de partida, mas cada caso deve ser analisado 
+individualmente
+
+1. Métodos - Quando usar e porquê
+
+a. Grid Search
+    - Você tem poucos hiperparâmetros (1–3), bem delimitados 
+    - Simples, exaustivo e eficaz em espaços pequenos
+
+b. Random Search
+    - Você tem espaço grande, mas quer algo simples	
+    - Cobre mais área com menos custo que o Grid Search
+    - Você quer algo rápido, mas com boas chances de encontrar algo bom
+
+c. Adaptative Selection/Racing
+    - Você quer economizar tempo e parar os ruins cedo	
+    - Avalia parcialmente, elimina candidatos ruins rapidamente
+    - Você quer algo rápido, mas com boas chances de encontrar algo bom
+
+d. Hyperband (Meta algoritmo racing)
+    - Seu modelo é muito caro de treinar (ex: deep learning)
+    - Começa com pouco recurso, aumenta apenas nos melhores
+
+e. Bayesian Optimization
+    - Você quer buscar hiperparâmetros com inteligência, usando o histórico 
+    - Usa modelos probabilísticos para explorar regiões promissoras
+    - Você quer a solução mais "automática" possível (AutoML style) 
+        (menos necessidade de escolher ranges manualmente)
+
+f . Simulated Annealing
+    - Seu problema tem muitos mínimos locais, ou é difícil de modelar 
+        (ex: funções não suaves, espaço misto)
+    - Pode escapar de mínimos locais, funciona bem sem derivadas
+
+
+2. Método por tipo de modelo:
+
+a. Árvores (RF, XGBoost, LightGBM)	   
+    - Random + Racing / Hyperband
+
+b. Redes neurais
+    - Hyperband ou Bayesian
+
+c. Modelos rápidos (logísticos, KNN)	
+    - Grid ou Random
+
+d. Modelos com treino muito lento	 
+    - Adaptive ou Bayes
+
+3. Por tempo disponível para tuning
+
+a. Muito pouco (minutos)
+    - Random Search
+
+b. Médio (1–2 horas) 
+    - Racing / Adaptive
+
+c. Muito (overnight)	
+    - Bayesian / Hyperband
+
+d. Longo prazo (AutoML)
+    - Bayesian com pruning
+
+Dica extra:
+Caso haja disponibilidade de tempo e recursos, uma combinação pode ser usada
+Por exemplo: Random Search + early stopping (ou racing): rápido e eficiente.
+Depois que encontrar regiões boas, você pode refinar com Bayesian ou 
+até um grid pequeno.
+
