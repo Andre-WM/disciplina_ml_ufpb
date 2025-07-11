@@ -138,10 +138,12 @@ tune_res <- tune_grid(
 # 6. Racing (Hyperband, Successive Halving)
 # Avaliam muitos hiperparâmetros com menos recursos (ex: menos folds ou dados) 
 # e vão alocando mais recursos apenas para os melhores candidatos.
-# Muito eficiente e escala bem para grandes espaços
+# Muito eficiente e escala bem para grandes espaços 
+# e modelos com alto custo de treino
 # Pode ser sensivel a escolhas iniciais
 # finetune::tune_race_win_loss() ou finetune::tune_race_anova()
 # custo muito baixo a medio por iteraçao
+# versões mais atuais de algoritmos adaptative selection
 
 # intervalos de confiança para o rmse
 tune::int_pctl(tune_res)
