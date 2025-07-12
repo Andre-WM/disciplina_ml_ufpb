@@ -1,0 +1,92 @@
+Here are some insights on modeling approaches. This way aims to not just only create a 
+prediction model, but also thinking and understanding data, using reliability from 
+statistics/mathmatics and computational/prediction power from ML.
+
+Inspired by (but not only): https://www2.math.uu.se/~thulin/mm/breiman.pdf
+
+1. Understand the Problem and the Data
+Clarify goals: prediction, inference, explanation, decision support?
+
+Identify constraints (interpretability, latency, compute, legal).
+
+Review data sources and quality.
+
+2. Start with Simple Models — for Understanding
+Use linear/logistic regression, decision trees, or rules to:
+
+Identify dominant signals and key relationships.
+
+Perform inference on feature importance and directionality.
+
+Detect confounders, multicollinearity, or biases.
+
+Use them to derive new features (e.g., log-transforms, ratios, interaction terms).
+
+✅ Goal: build intuition and extract structure, not just accuracy.
+
+3. Perform Exploratory Data Analysis (EDA)
+Visualize relationships (e.g., scatterplots, boxplots, correlation heatmaps).
+
+Profile features across target classes.
+
+Quantify class imbalance or missingness.
+
+4. Assess Simple Models for Deployment
+Evaluate accuracy, precision, recall, AUC, calibration.
+
+If performance is good and interpretability is key, you may stop here.
+
+✅ A simple model that performs well and supports understanding is ideal.
+
+5. If Needed, Explore Complex Models
+Use algorithms like random forests, XGBoost, SVMs, deep learning, etc.
+
+Only do this if:
+
+The problem is inherently nonlinear or high-dimensional.
+
+Accuracy of simple models is unsatisfactory.
+
+There’s a real need for predictive power.
+
+6. Interpret and Diagnose Complex Models
+Apply model-agnostic tools:
+
+SHAP values, LIME, permutation importance, ICE plots.
+
+Understand:
+
+What drives predictions globally and locally.
+
+Where the model might fail.
+
+7. Validate with Domain Knowledge
+Share insights with domain experts.
+
+Sanity-check unexpected findings.
+
+Re-verify feature definitions and data transformations.
+
+8. Communicate Findings and Decisions
+Present both insight and performance.
+
+Use clear visualizations, examples, and uncertainty estimates.
+
+Highlight where the model is strong, and where caution is needed.
+
+9. Decide What to Deploy
+Choose the model (simple or complex) that best balances:
+
+Accuracy
+
+Interpretability
+
+Trust
+
+Operational needs
+
+10. Monitor and Reassess
+Track model performance and changes in data.
+
+Periodically reassess interpretability and understanding.
+
